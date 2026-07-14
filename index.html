@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browse office laptops available through our in-house auction.">
+  <meta name="theme-color" content="#0b172a">
+  <title>Office Laptop Auction</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#catalog">Skip to laptop listings</a>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#" aria-label="Auction homepage">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img">
+            <rect x="8" y="10" width="32" height="23" rx="3"></rect>
+            <path d="M5 37h38"></path>
+            <path d="M20 37h8"></path>
+          </svg>
+        </span>
+        <span>
+          <strong id="organizationName">In-House Laptop Auction</strong>
+          <small>Office equipment marketplace</small>
+        </span>
+      </a>
+      <a class="header-link" href="#how-it-works">How it works</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-glow hero-glow-one"></div>
+      <div class="hero-glow hero-glow-two"></div>
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow" id="heroEyebrow">Company equipment sale</p>
+          <h1 id="heroTitle">Reliable office laptops, ready for a new home.</h1>
+          <p class="hero-text" id="heroText">
+            Browse retired in-house laptops, compare specifications and review each lot before placing a bid.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#catalog">Browse available laptops</a>
+            <a class="button button-secondary" href="#how-it-works">Auction information</a>
+          </div>
+        </div>
+
+        <div class="hero-panel" aria-label="Auction summary">
+          <div class="panel-top">
+            <span class="live-dot"></span>
+            <span>Current catalogue</span>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <strong id="heroListingCount">—</strong>
+              <span>Available lots</span>
+            </div>
+            <div>
+              <strong id="heroBrandCount">—</strong>
+              <span>Brands</span>
+            </div>
+            <div>
+              <strong id="heroPriceFrom">—</strong>
+              <span>Starting from</span>
+            </div>
+          </div>
+          <div class="panel-illustration" aria-hidden="true">
+            <svg viewBox="0 0 500 250">
+              <defs>
+                <linearGradient id="screenGradient" x1="0" x2="1">
+                  <stop offset="0" stop-color="#152f56"></stop>
+                  <stop offset="1" stop-color="#214f7f"></stop>
+                </linearGradient>
+              </defs>
+              <rect x="112" y="30" width="276" height="166" rx="12" fill="#d8e4f0"></rect>
+              <rect x="126" y="44" width="248" height="138" rx="5" fill="url(#screenGradient)"></rect>
+              <circle cx="250" cy="37" r="2.5" fill="#7890aa"></circle>
+              <path d="M83 205h334l31 17c7 4 4 13-4 13H56c-8 0-11-9-4-13l31-17z" fill="#edf3f8"></path>
+              <rect x="209" y="210" width="82" height="7" rx="3.5" fill="#b7c9da"></rect>
+              <path d="M159 87h72v11h-72zM159 108h154v8H159zM159 126h129v8H159z" fill="#90c8ff" opacity=".8"></path>
+              <circle cx="325" cy="93" r="24" fill="#f4b860"></circle>
+              <path d="M314 93l8 8 15-18" fill="none" stroke="#0b172a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="catalog-section" id="catalog">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow dark">Available inventory</p>
+            <h2>Find the right laptop</h2>
+          </div>
+          <p id="resultSummary" class="result-summary" aria-live="polite">Loading catalogue…</p>
+        </div>
+
+        <div class="filters" aria-label="Catalogue filters">
+          <label class="search-field">
+            <span class="sr-only">Search laptops</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-4-4"></path>
+            </svg>
+            <input id="searchInput" type="search" placeholder="Search model, processor or lot number">
+          </label>
+
+          <label>
+            <span class="sr-only">Filter by brand</span>
+            <select id="brandFilter">
+              <option value="">All brands</option>
+            </select>
+          </label>
+
+          <label>
+            <span class="sr-only">Filter by condition</span>
+            <select id="conditionFilter">
+              <option value="">All conditions</option>
+            </select>
+          </label>
+
+          <label>
+            <span class="sr-only">Sort catalogue</span>
+            <select id="sortSelect">
+              <option value="default">Recommended</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="brand">Brand and model</option>
+              <option value="lot">Lot number</option>
+            </select>
+          </label>
+
+          <button id="clearFilters" class="clear-button" type="button">Clear</button>
+        </div>
+
+        <div id="loadingState" class="message-card">
+          <span class="spinner" aria-hidden="true"></span>
+          <div>
+            <strong>Loading laptop inventory</strong>
+            <p>Please wait while the catalogue is prepared.</p>
+          </div>
+        </div>
+
+        <div id="errorState" class="message-card error-card" hidden>
+          <div class="message-icon" aria-hidden="true">!</div>
+          <div>
+            <strong>We could not load the catalogue</strong>
+            <p id="errorMessage">Please refresh the page or try again later.</p>
+          </div>
+        </div>
+
+        <div id="emptyState" class="message-card" hidden>
+          <div class="message-icon" aria-hidden="true">0</div>
+          <div>
+            <strong>No laptops match these filters</strong>
+            <p>Try clearing a filter or using a different search term.</p>
+          </div>
+        </div>
+
+        <div id="listingGrid" class="listing-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="how-section" id="how-it-works">
+      <div class="shell">
+        <div class="section-heading centered">
+          <div>
+            <p class="eyebrow dark">Simple and transparent</p>
+            <h2>How the auction works</h2>
+          </div>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card">
+            <span>01</span>
+            <h3>Review the catalogue</h3>
+            <p>Compare specifications, condition notes, included accessories and the starting bid.</p>
+          </article>
+          <article class="step-card">
+            <span>02</span>
+            <h3>Inspect the lot details</h3>
+            <p>Open a listing to see the complete technical and condition information recorded for that laptop.</p>
+          </article>
+          <article class="step-card">
+            <span>03</span>
+            <h3>Follow bidding instructions</h3>
+            <p>Use the configured bidding link or contact method once bidding is enabled by the auction administrator.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <div>
+        <strong id="footerOrganization">In-House Laptop Auction</strong>
+        <p>Office equipment is offered as described in each listing.</p>
+      </div>
+      <p>Catalogue powered by a CSV inventory file.</p>
+    </div>
+  </footer>
+
+  <dialog id="detailsDialog" class="details-dialog">
+    <div class="dialog-layout">
+      <button id="closeDialog" class="dialog-close" type="button" aria-label="Close details">×</button>
+      <div id="dialogMedia" class="dialog-media"></div>
+      <div class="dialog-content">
+        <div class="dialog-heading">
+          <div>
+            <p id="dialogLot" class="lot-number"></p>
+            <h2 id="dialogTitle"></h2>
+          </div>
+          <span id="dialogCondition" class="condition-badge"></span>
+        </div>
+        <p id="dialogDescription" class="dialog-description"></p>
+        <div id="dialogPrice" class="dialog-price"></div>
+        <dl id="dialogSpecs" class="spec-list"></dl>
+        <div id="dialogNotes" class="notes-box" hidden></div>
+        <div class="dialog-actions">
+          <button id="bidButton" class="button button-primary" type="button">Submit a bid</button>
+          <button id="copyLotButton" class="button button-outline" type="button">Copy lot number</button>
+        </div>
+        <p id="bidHelp" class="bid-help"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <template id="cardTemplate">
+    <article class="listing-card">
+      <div class="card-media">
+        <div class="card-placeholder" aria-hidden="true">
+          <svg viewBox="0 0 80 80">
+            <rect x="15" y="16" width="50" height="36" rx="4"></rect>
+            <path d="M8 60h64"></path>
+            <path d="M33 60h14"></path>
+          </svg>
+        </div>
+        <img class="card-image" alt="" hidden>
+        <div class="card-status"></div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-lot"></span>
+          <span class="card-condition"></span>
+        </div>
+        <h3 class="card-title"></h3>
+        <p class="card-subtitle"></p>
+        <div class="spec-chips"></div>
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          <div class="card-price">
+            <span>Starting bid</span>
+            <strong></strong>
+          </div>
+          <button class="view-button" type="button">
+            View details
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </article>
+  </template>
+</body>
+</html>
