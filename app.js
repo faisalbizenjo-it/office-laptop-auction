@@ -255,6 +255,7 @@
       );
 
       fragment.querySelector(".view-button").addEventListener("click", () => openDetails(record));
+      fragment.querySelector(".card-bid-button").addEventListener("click", () => openBidForm(record));
       card.addEventListener("dblclick", () => openDetails(record));
       addImage(image, placeholder, record);
       elements.listingGrid.appendChild(fragment);
@@ -393,11 +394,15 @@
     const hasBidUrl = normalized(config.bidFormUrl);
     const hasEmail = normalized(config.supportEmail);
     elements.bidButton.disabled = false;
-    elements.bidButton.textContent = hasBidUrl || hasEmail ? "Submit a bid" : "Bidding details";
+    elements.bidButton.textContent = hasBidUrl
+      ? "Open bid form"
+      : hasEmail
+        ? "Send bid enquiry"
+        : "Bid on this laptop";
     elements.bidHelp.textContent =
       hasBidUrl || hasEmail
-        ? "Your lot number will be included automatically."
-        : "The bidding link has not been configured yet. The catalogue can still be browsed.";
+        ? "The selected lot number and laptop title will be included automatically."
+        : "Add the Google Form pre-filled link to bidFormUrl in config.js.";
 
     if (typeof elements.dialog.showModal === "function") {
       elements.dialog.showModal();
@@ -417,10 +422,11 @@
     `;
   }
 
-  function handleBid() {
-    if (!state.selected) return;
-    const lot = encodeURIComponent(normalized(state.selected.lot_number));
-    const title = encodeURIComponent(getTitle(state.selected));
+  function openBidForm(record) {
+    if (!record) return;
+
+    const lot = encodeURIComponent(normalized(record.lot_number));
+    const title = encodeURIComponent(getTitle(record));
 
     if (normalized(config.bidFormUrl)) {
       const destination = config.bidFormUrl
@@ -431,16 +437,21 @@
     }
 
     if (normalized(config.supportEmail)) {
-      const subject = encodeURIComponent(`Bid enquiry for lot ${state.selected.lot_number}`);
+      const subject = encodeURIComponent(`Bid enquiry for lot ${record.lot_number}`);
       const body = encodeURIComponent(
-        `Hello,\n\nI would like to submit a bid for:\nLot: ${state.selected.lot_number}\nLaptop: ${getTitle(state.selected)}\n\nMy bid amount:\nName:\nContact number:\n\nThank you.`
+        `Hello,\n\nI would like to submit a bid for:\nLot: ${record.lot_number}\nLaptop: ${getTitle(record)}\n\nMy bid amount:\nEmployee name:\nEmployee ID:\nContact number:\n\nThank you.`
       );
       window.location.href = `mailto:${config.supportEmail}?subject=${subject}&body=${body}`;
       return;
     }
 
-    elements.bidHelp.textContent =
-      "Add a bid form URL or support email in config.js to activate this button.";
+    window.alert(
+      "The Google Form bidding link has not been configured yet. Add the pre-filled form link to bidFormUrl in config.js."
+    );
+  }
+
+  function handleBid() {
+    openBidForm(state.selected);
   }
 
   async function copyLotNumber() {

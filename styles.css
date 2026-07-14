@@ -597,6 +597,33 @@ img {
   transform: translateX(3px);
 }
 
+.card-bid-button {
+  width: 100%;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 15px;
+  color: #0d1b2f;
+  background: var(--gold);
+  border: 1px solid #e3a94f;
+  border-radius: 11px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.card-bid-button:hover {
+  transform: translateY(-1px);
+  background: #ffc873;
+  box-shadow: 0 8px 20px rgba(244, 184, 96, 0.24);
+}
+
+.card-bid-button span {
+  font-size: 1rem;
+}
+
 .message-card {
   display: flex;
   align-items: center;

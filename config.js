@@ -5,8 +5,20 @@ window.AUCTION_CONFIG = {
   heroTitle: "Reliable office laptops, ready for a new home.",
   heroText:
     "Browse retired in-house laptops, compare specifications and review each lot before placing a bid.",
-  supportEmail: "",
+
+  // GOOGLE FORM BIDDING
+  // Paste your Google Forms pre-filled link below.
+  // Replace the sample lot value with {lot_number}
+  // Replace the sample laptop-title value with {listing_title}
+  //
+  // Example format:
+  // bidFormUrl:
+  //   "https://docs.google.com/forms/d/e/FORM_ID/viewform?usp=pp_url&entry.111111={lot_number}&entry.222222={listing_title}",
   bidFormUrl: "",
+
+  // Optional fallback. Used only when bidFormUrl is blank.
+  supportEmail: "",
+
   currencyLocale: "en-PK",
   defaultCurrency: "PKR",
   dataFile: "data/laptops.csv",
