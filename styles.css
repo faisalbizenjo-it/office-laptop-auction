@@ -1,16 +1,16 @@
 :root {
-  --ink: #0b172a;
-  --ink-soft: #41516a;
-  --navy: #0b172a;
-  --navy-2: #142943;
-  --blue: #2878c8;
-  --blue-light: #e8f3ff;
-  --gold: #f4b860;
+  --ink: #241936;
+  --ink-soft: #5a4d6f;
+  --navy: #2e1b4f;
+  --navy-2: #402268;
+  --blue: #5d2f8e;
+  --blue-light: #f3ecfb;
+  --gold: #7a3db8;
   --paper: #ffffff;
-  --mist: #f4f7fa;
-  --line: #dce4ec;
-  --success: #17795f;
-  --shadow: 0 18px 55px rgba(11, 23, 42, 0.1);
+  --mist: #f7f2fc;
+  --line: #e5d8f2;
+  --success: #4f2e75;
+  --shadow: 0 18px 55px rgba(56, 24, 93, 0.12);
   --radius-lg: 24px;
   --radius-md: 16px;
   --radius-sm: 10px;
@@ -97,23 +97,43 @@ img {
   text-decoration: none;
 }
 
-.brand-mark {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  color: var(--gold);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
+.brand-logo {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  display: block;
+  background: white;
+  border-radius: 14px;
+  padding: 4px;
 }
 
-.brand-mark svg {
-  width: 27px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-width: 2.4;
+.panel-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  display: block;
+  background: white;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  background: white;
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.brand-mark {
+  display: none;
 }
 
 .brand strong,
@@ -148,8 +168,9 @@ img {
   overflow: hidden;
   color: white;
   background:
-    radial-gradient(circle at 90% 10%, rgba(40, 120, 200, 0.21), transparent 32%),
-    linear-gradient(135deg, #0b172a 0%, #102640 55%, #0d1d32 100%);
+    radial-gradient(circle at 88% 12%, rgba(154, 99, 221, 0.28), transparent 34%),
+    radial-gradient(circle at 18% 20%, rgba(110, 58, 169, 0.18), transparent 30%),
+    linear-gradient(135deg, #24103f 0%, #3a1f63 55%, #2b1648 100%);
 }
 
 .hero::after {
@@ -229,12 +250,12 @@ img {
 }
 
 .button-primary {
-  color: #0d1b2f;
+  color: #ffffff;
   background: var(--gold);
 }
 
 .button-primary:hover {
-  background: #ffc873;
+  background: #8b4fcb;
 }
 
 .button-secondary {
@@ -475,9 +496,9 @@ img {
   top: 13px;
   left: 13px;
   padding: 6px 9px;
-  color: #0f604b;
-  background: rgba(230, 250, 243, 0.94);
-  border: 1px solid rgba(23, 121, 95, 0.15);
+  color: #4a246d;
+  background: rgba(244, 234, 255, 0.96);
+  border: 1px solid rgba(93, 47, 142, 0.16);
   border-radius: 999px;
   font-size: 0.68rem;
   font-weight: 800;
@@ -510,8 +531,8 @@ img {
 .card-condition,
 .condition-badge {
   padding: 5px 8px;
-  color: #5d4a20;
-  background: #fff4dc;
+  color: #4b2a6e;
+  background: #efe3fb;
   border-radius: 999px;
   font-size: 0.68rem;
   font-weight: 800;
@@ -605,7 +626,7 @@ img {
   justify-content: center;
   gap: 8px;
   margin-top: 15px;
-  color: #0d1b2f;
+  color: #ffffff;
   background: var(--gold);
   border: 1px solid #e3a94f;
   border-radius: 11px;
@@ -616,7 +637,7 @@ img {
 
 .card-bid-button:hover {
   transform: translateY(-1px);
-  background: #ffc873;
+  background: #8b4fcb;
   box-shadow: 0 8px 20px rgba(244, 184, 96, 0.24);
 }
 
@@ -846,9 +867,9 @@ img {
 .dialog-price {
   margin-bottom: 24px;
   padding: 17px 18px;
-  color: #0f604b;
-  background: #ecf9f4;
-  border: 1px solid #d2eee4;
+  color: #4d2b70;
+  background: #f2eaff;
+  border: 1px solid #e0cff7;
   border-radius: 12px;
   font-size: 0.8rem;
 }
@@ -896,9 +917,9 @@ img {
 .notes-box {
   margin-top: 22px;
   padding: 16px;
-  color: #665228;
-  background: #fff8e9;
-  border: 1px solid #f2dfb8;
+  color: #5d417d;
+  background: #f8f1ff;
+  border: 1px solid #eadbf8;
   border-radius: 12px;
   font-size: 0.86rem;
   line-height: 1.65;
@@ -971,6 +992,11 @@ img {
   .header-link,
   .brand small {
     display: none;
+  }
+
+  .brand-logo {
+    width: 48px;
+    height: 48px;
   }
 
   .hero-grid {

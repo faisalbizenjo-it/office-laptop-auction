@@ -1,10 +1,10 @@
 window.AUCTION_CONFIG = {
-  organizationName: "In-House Laptop Auction",
-  pageTitle: "Office Laptop Auction",
-  heroEyebrow: "Company equipment sale",
-  heroTitle: "Reliable office laptops, ready for a new home.",
+  organizationName: "KODERLABS Laptop Auction",
+  pageTitle: "KODERLABS Laptop Auction",
+  heroEyebrow: "KODERLABS employee auction",
+  heroTitle: "KODERLABS office laptops, available for employee bidding.",
   heroText:
-    "Browse retired in-house laptops, compare specifications and review each lot before placing a bid.",
+    "Browse available KODERLABS laptops, compare specifications and place your bid through the employee auction form.",
 
   // GOOGLE FORM BIDDING
   // Paste your Google Forms pre-filled link below.
