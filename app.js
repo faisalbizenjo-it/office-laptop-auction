@@ -393,16 +393,23 @@
 
     const hasBidUrl = normalized(config.bidFormUrl);
     const hasEmail = normalized(config.supportEmail);
+    const hasPrefillPlaceholders =
+      hasBidUrl.includes("{lot_number}") || hasBidUrl.includes("{listing_title}");
+
     elements.bidButton.disabled = false;
     elements.bidButton.textContent = hasBidUrl
       ? "Open bid form"
       : hasEmail
         ? "Send bid enquiry"
         : "Bid on this laptop";
-    elements.bidHelp.textContent =
-      hasBidUrl || hasEmail
+
+    elements.bidHelp.textContent = hasBidUrl
+      ? hasPrefillPlaceholders
         ? "The selected lot number and laptop title will be included automatically."
-        : "Add the Google Form pre-filled link to bidFormUrl in config.js.";
+        : "The Google Form will open in a new tab. Enter or confirm the lot number and laptop title."
+      : hasEmail
+        ? "The selected lot number and laptop title will be included in the email."
+        : "Add the Google Form link to bidFormUrl in config.js.";
 
     if (typeof elements.dialog.showModal === "function") {
       elements.dialog.showModal();

@@ -14,7 +14,7 @@ window.AUCTION_CONFIG = {
   // Example format:
   // bidFormUrl:
   //   "https://docs.google.com/forms/d/e/FORM_ID/viewform?usp=pp_url&entry.111111={lot_number}&entry.222222={listing_title}",
-  bidFormUrl: "",
+  bidFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSf6miJ4n4JsQiLdE-zycLKDRgtyn82fwQAS1GKt-DnxWSc5Gw/viewform",
 
   // Optional fallback. Used only when bidFormUrl is blank.
   supportEmail: "",
