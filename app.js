@@ -8,6 +8,8 @@
     selected: null
   };
 
+  let activeSlider = null;
+
   const $ = (selector) => document.querySelector(selector);
 
   const elements = {
@@ -145,6 +147,14 @@
     return `${config.imagesFolder || "images/"}${image}`;
   }
 
+  const PHOTO_KEYS = ["photo_1", "photo_2", "photo_3", "photo_4", "photo_5"];
+
+  function getPhotos(record) {
+    return PHOTO_KEYS
+      .map((key) => imagePath(record[key]))
+      .filter(Boolean);
+  }
+
   function getTitle(record) {
     return (
       normalized(record.listing_title) ||
@@ -199,7 +209,7 @@
   }
 
   function addImage(img, placeholder, record) {
-    const src = imagePath(record.photo_1);
+    const src = getPhotos(record)[0];
     if (!src) return;
 
     img.src = src;
@@ -379,17 +389,7 @@
     elements.dialogNotes.hidden = !notes;
     elements.dialogNotes.textContent = notes;
 
-    elements.dialogMedia.replaceChildren();
-    const src = imagePath(record.photo_1);
-    if (src) {
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = `${getTitle(record)} auction photo`;
-      img.addEventListener("error", renderDialogPlaceholder, { once: true });
-      elements.dialogMedia.appendChild(img);
-    } else {
-      renderDialogPlaceholder();
-    }
+    renderDialogMedia(record);
 
     const hasBidUrl = normalized(config.bidFormUrl);
     const hasEmail = normalized(config.supportEmail);
@@ -418,15 +418,125 @@
     }
   }
 
+  const PLACEHOLDER_SVG = `
+    <svg viewBox="0 0 180 180" aria-hidden="true">
+      <rect x="35" y="42" width="110" height="76" rx="8"></rect>
+      <path d="M20 135h140"></path>
+      <path d="M73 135h34"></path>
+    </svg>
+  `;
+
   function renderDialogPlaceholder() {
+    activeSlider = null;
     elements.dialogMedia.replaceChildren();
-    elements.dialogMedia.innerHTML = `
-      <svg viewBox="0 0 180 180" aria-hidden="true">
-        <rect x="35" y="42" width="110" height="76" rx="8"></rect>
-        <path d="M20 135h140"></path>
-        <path d="M73 135h34"></path>
-      </svg>
-    `;
+    elements.dialogMedia.innerHTML = PLACEHOLDER_SVG;
+  }
+
+  function renderDialogMedia(record) {
+    activeSlider = null;
+    elements.dialogMedia.replaceChildren();
+
+    const photos = getPhotos(record);
+    if (photos.length === 0) {
+      renderDialogPlaceholder();
+      return;
+    }
+
+    const slider = document.createElement("div");
+    slider.className = "media-slider";
+
+    const track = document.createElement("div");
+    track.className = "media-track";
+
+    photos.forEach((src, index) => {
+      const slide = document.createElement("div");
+      slide.className = "media-slide";
+
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = `${getTitle(record)} auction photo ${index + 1} of ${photos.length}`;
+      img.loading = index === 0 ? "eager" : "lazy";
+      img.addEventListener(
+        "error",
+        () => {
+          slide.classList.add("media-slide-broken");
+          slide.innerHTML = PLACEHOLDER_SVG;
+        },
+        { once: true }
+      );
+
+      slide.appendChild(img);
+      track.appendChild(slide);
+    });
+
+    slider.appendChild(track);
+
+    // A single photo needs no controls.
+    if (photos.length === 1) {
+      elements.dialogMedia.appendChild(slider);
+      return;
+    }
+
+    let current = 0;
+    const dots = [];
+
+    const counter = document.createElement("span");
+    counter.className = "media-counter";
+
+    const goTo = (index) => {
+      current = (index + photos.length) % photos.length;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((dot, dotIndex) => {
+        dot.classList.toggle("is-active", dotIndex === current);
+        dot.setAttribute("aria-current", dotIndex === current ? "true" : "false");
+      });
+      counter.textContent = `${current + 1} / ${photos.length}`;
+    };
+
+    const prev = document.createElement("button");
+    prev.type = "button";
+    prev.className = "media-nav media-nav-prev";
+    prev.setAttribute("aria-label", "Previous photo");
+    prev.innerHTML = "<span aria-hidden=\"true\">‹</span>";
+    prev.addEventListener("click", () => goTo(current - 1));
+
+    const next = document.createElement("button");
+    next.type = "button";
+    next.className = "media-nav media-nav-next";
+    next.setAttribute("aria-label", "Next photo");
+    next.innerHTML = "<span aria-hidden=\"true\">›</span>";
+    next.addEventListener("click", () => goTo(current + 1));
+
+    const dotWrap = document.createElement("div");
+    dotWrap.className = "media-dots";
+    photos.forEach((_, index) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "media-dot";
+      dot.setAttribute("aria-label", `Go to photo ${index + 1}`);
+      dot.addEventListener("click", () => goTo(index));
+      dots.push(dot);
+      dotWrap.appendChild(dot);
+    });
+
+    slider.append(prev, next, counter, dotWrap);
+
+    // Touch / pointer swipe support.
+    let startX = null;
+    slider.addEventListener("pointerdown", (event) => {
+      startX = event.clientX;
+    });
+    slider.addEventListener("pointerup", (event) => {
+      if (startX === null) return;
+      const delta = event.clientX - startX;
+      if (Math.abs(delta) > 40) goTo(delta < 0 ? current + 1 : current - 1);
+      startX = null;
+    });
+
+    elements.dialogMedia.appendChild(slider);
+    goTo(0);
+
+    activeSlider = { goTo, get current() { return current; } };
   }
 
   function openBidForm(record) {
@@ -502,6 +612,14 @@
     elements.dialog.addEventListener("cancel", (event) => {
       event.preventDefault();
       closeDialog();
+    });
+    elements.dialog.addEventListener("keydown", (event) => {
+      if (!activeSlider) return;
+      if (event.key === "ArrowLeft") {
+        activeSlider.goTo(activeSlider.current - 1);
+      } else if (event.key === "ArrowRight") {
+        activeSlider.goTo(activeSlider.current + 1);
+      }
     });
     elements.bidButton.addEventListener("click", handleBid);
     elements.copyLotButton.addEventListener("click", copyLotNumber);
