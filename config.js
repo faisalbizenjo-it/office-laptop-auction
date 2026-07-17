@@ -24,7 +24,7 @@ window.AUCTION_CONFIG = {
   // The tab must have two columns with these exact headers: lot_number,bids
   // In Google Sheets: File > Share > Publish to web > choose that tab > CSV.
   // Leave blank to hide bid counts entirely.
-  bidCountsUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTouHhTxYl_W-nTftNIyogXG-hPu70Hlfbl7ImWy3sap0JBRSiRfEe77s8vg-AaFmogXafDlbF_nZ6j/pub?output=csv",
+  bidCountsUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTouHhTxYl_W-nTftNIyogXG-hPu70Hlfbl7ImWy3sap0JBRSiRfEe77s8vg-AaFmogXafDlbF_nZ6j/pub?gid=654057997&single=true&output=csv",
 
   currencyLocale: "en-PK",
   defaultCurrency: "PKR",
