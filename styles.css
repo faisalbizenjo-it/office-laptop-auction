@@ -506,6 +506,32 @@ img {
   backdrop-filter: blur(8px);
 }
 
+.card-bids {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  padding: 6px 10px;
+  color: #ffffff;
+  background: rgba(11, 23, 42, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(8px);
+}
+
+.card-bids::before {
+  content: "\1F528";
+  margin-right: 5px;
+}
+
+.card-bids.card-bids-empty {
+  color: #5b6b82;
+  background: rgba(238, 243, 248, 0.94);
+  border-color: rgba(91, 107, 130, 0.2);
+}
+
 .card-body {
   flex: 1;
   display: flex;
@@ -989,6 +1015,30 @@ img {
   margin: 17px 0 22px;
   color: var(--ink-soft);
   line-height: 1.7;
+}
+
+.dialog-bids {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 18px;
+  padding: 8px 14px;
+  color: #1c3a63;
+  background: #e6effa;
+  border: 1px solid #cadcf0;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.dialog-bids::before {
+  content: "\1F528";
+}
+
+.dialog-bids.dialog-bids-empty {
+  color: #5b6b82;
+  background: #eef3f8;
+  border-color: #d9e2ec;
 }
 
 .dialog-price {

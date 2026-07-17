@@ -5,7 +5,9 @@
   const state = {
     records: [],
     filtered: [],
-    selected: null
+    selected: null,
+    bidCounts: {},
+    bidCountsLoaded: false
   };
 
   let activeSlider = null;
@@ -40,6 +42,7 @@
     dialogTitle: $("#dialogTitle"),
     dialogCondition: $("#dialogCondition"),
     dialogDescription: $("#dialogDescription"),
+    dialogBids: $("#dialogBids"),
     dialogPrice: $("#dialogPrice"),
     dialogSpecs: $("#dialogSpecs"),
     dialogNotes: $("#dialogNotes"),
@@ -155,6 +158,18 @@
       .filter(Boolean);
   }
 
+  function getBidCount(record) {
+    if (!state.bidCountsLoaded) return null;
+    const lot = normalized(record.lot_number);
+    if (!lot) return null;
+    return state.bidCounts[lot] || 0;
+  }
+
+  function bidCountLabel(count) {
+    if (count === 0) return "No bids yet";
+    return `${count.toLocaleString()} ${count === 1 ? "bid" : "bids"}`;
+  }
+
   function getTitle(record) {
     return (
       normalized(record.listing_title) ||
@@ -240,6 +255,14 @@
 
       fragment.querySelector(".card-status").textContent =
         normalized(record.listing_status) || "Available";
+
+      const bidBadge = fragment.querySelector(".card-bids");
+      const bidCount = getBidCount(record);
+      if (bidCount !== null) {
+        bidBadge.textContent = bidCountLabel(bidCount);
+        bidBadge.classList.toggle("card-bids-empty", bidCount === 0);
+        bidBadge.hidden = false;
+      }
       fragment.querySelector(".card-lot").textContent =
         `Lot ${normalized(record.lot_number) || "—"}`;
       fragment.querySelector(".card-condition").textContent =
@@ -349,6 +372,15 @@
       normalized(record.short_description) ||
       normalized(record.cosmetic_condition) ||
       "Review the recorded specifications and condition information below.";
+
+    const dialogBidCount = getBidCount(record);
+    if (dialogBidCount !== null) {
+      elements.dialogBids.textContent = bidCountLabel(dialogBidCount);
+      elements.dialogBids.classList.toggle("dialog-bids-empty", dialogBidCount === 0);
+      elements.dialogBids.hidden = false;
+    } else {
+      elements.dialogBids.hidden = true;
+    }
 
     elements.dialogPrice.replaceChildren();
     const priceLabel = document.createElement("span");
@@ -625,6 +657,42 @@
     elements.copyLotButton.addEventListener("click", copyLotNumber);
   }
 
+  async function loadBidCounts() {
+    const url = normalized(config.bidCountsUrl);
+    if (!url) return;
+
+    try {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) return;
+
+      const text = await response.text();
+      const rows = parseCSV(text);
+      const counts = {};
+
+      rows.forEach((row) => {
+        const lot = normalized(row.lot_number || row.lot || row.Lot);
+        const raw = String(row.bids ?? row.count ?? row.bid_count ?? "").replace(/[^0-9]/g, "");
+        const count = parseInt(raw, 10);
+        if (lot && Number.isFinite(count)) counts[lot] = count;
+      });
+
+      state.bidCounts = counts;
+      state.bidCountsLoaded = true;
+
+      renderCards();
+      if (state.selected) {
+        const count = getBidCount(state.selected);
+        if (count !== null) {
+          elements.dialogBids.textContent = bidCountLabel(count);
+          elements.dialogBids.classList.toggle("dialog-bids-empty", count === 0);
+          elements.dialogBids.hidden = false;
+        }
+      }
+    } catch (error) {
+      console.error("Bid counts unavailable:", error);
+    }
+  }
+
   async function loadData() {
     try {
       const response = await fetch(config.dataFile || "data/laptops.csv", {
@@ -664,5 +732,5 @@
 
   applyConfig();
   bindEvents();
-  loadData();
+  loadData().then(loadBidCounts);
 })();

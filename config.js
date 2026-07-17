@@ -19,6 +19,13 @@ window.AUCTION_CONFIG = {
   // Optional fallback. Used only when bidFormUrl is blank.
   supportEmail: "",
 
+  // LIVE BID COUNTS (optional)
+  // Public CSV link of a Google Sheet tab that lists how many bids each lot has.
+  // The tab must have two columns with these exact headers: lot_number,bids
+  // In Google Sheets: File > Share > Publish to web > choose that tab > CSV.
+  // Leave blank to hide bid counts entirely.
+  bidCountsUrl: "",
+
   currencyLocale: "en-PK",
   defaultCurrency: "PKR",
   dataFile: "data/laptops.csv",
